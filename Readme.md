@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Елена Гарипова](https://up.htmlacademy.ru/ecmascript-individual/2/user/2545671).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Андреев] (https://htmlacademy.ru/profile/id812127).
 
 ---
 
