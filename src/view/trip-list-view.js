@@ -1,14 +1,14 @@
 import { createElement } from '../render.js';
 
-function createNewTripListTemplate() {
+function createTripListTemplate() {
   return `
   <ul class="trip-events__list"></ul>
   `;
 }
 
-export default class NewTripListView {
+export default class TripListView {
   getTemplate() {
-    return createNewTripListTemplate();
+    return createTripListTemplate();
   }
 
   getElement() {

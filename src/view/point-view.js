@@ -1,8 +1,7 @@
 import { createElement } from '../render.js';
 
-function createNewPointTemplate() {
-  return `
-  <li class="trip-events__item">
+function createPointTemplate() {
+  return `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
                 <div class="event__type">
@@ -38,13 +37,12 @@ function createNewPointTemplate() {
                   <span class="visually-hidden">Open event</span>
                 </button>
               </div>
-            </li>
-  `;
+            </li>`;
 }
 
-export default class NewPointView {
+export default class PointView {
   getTemplate() {
-    return createNewPointTemplate();
+    return createPointTemplate();
   }
 
   getElement() {

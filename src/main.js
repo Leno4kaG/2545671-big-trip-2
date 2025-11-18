@@ -1,6 +1,6 @@
-import ComponentPresenter from './presenter/component-presenter';
-import NewTripInfoView from './view/trip-info-view.js';
-import NewTripFiltersView from './view/trip-filters-view.js';
+import MainPresenter from './presenter/main-presenter.js';
+import TripInfoView from './view/trip-info-view.js';
+import FiltersView from './view/filters-view.js';
 
 import { render } from './render.js';
 import { RenderPosition } from './render.js';
@@ -10,9 +10,9 @@ const pageContainer = pageMain.querySelector('.page-body__container');
 const tripInfo = document.querySelector('.trip-main');
 const tripFilters = document.querySelector('.trip-main__trip-controls');
 
-render(new NewTripInfoView(), tripInfo, RenderPosition.AFTERBEGIN);
-render(new NewTripFiltersView(), tripFilters);
+render(new TripInfoView(), tripInfo, RenderPosition.AFTERBEGIN);
+render(new FiltersView(), tripFilters);
 
-const componentPresenter = new ComponentPresenter({ container: pageContainer });
+const componentPresenter = new MainPresenter({ container: pageContainer });
 
 componentPresenter.init();
