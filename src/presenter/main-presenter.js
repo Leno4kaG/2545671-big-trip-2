@@ -15,7 +15,7 @@ export default class MainPresenter {
   }
 
   init() {
-    this.mainPoints = [...this.pointModel.getPoint()];
+    this.mainPoints = [...this.pointModel.getPoints()];
     render(this.sortComponent, this.container);
     render(this.listComponent, this.container);
     render(new FormEditView({

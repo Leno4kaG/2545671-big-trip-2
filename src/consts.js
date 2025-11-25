@@ -13,8 +13,8 @@ export const DATE_FORMAT = {
   DAY_MONTH_YEAR_TIME: 'DD/MM/YY[&nbsp;]HH:mm',
 };
 
-export const POINTS_TYPE = [
+export const POINTS_TYPES = [
   'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
 ];
 
-export const CITYS = ['Chamonix', 'Amsterdam', 'Geneva', 'Madrid', 'Istanbul', 'Rio de Janeiro', 'St. Petersburg', 'Paris'];
+export const CITIES = ['Chamonix', 'Amsterdam', 'Geneva', 'Madrid', 'Istanbul', 'Rio de Janeiro', 'St. Petersburg', 'Paris'];

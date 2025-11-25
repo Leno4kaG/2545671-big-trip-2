@@ -1,5 +1,5 @@
 import { createElement } from '../render.js';
-import { POINTS_TYPE, DATE_FORMAT, CITYS } from '../consts.js';
+import { POINTS_TYPES, DATE_FORMAT, CITIES } from '../consts.js';
 import { humanizeDueDate, transformString } from '../utils.js';
 
 function createTypeItemTemplate(id, pointType, checkedType) {
@@ -26,8 +26,8 @@ function createOffersTemplate(offers, checkedOffersId) {
     </div>`;
 }
 
-function createOfferListTemplate({ offers }, checkedOffersId) {
-  return offers ?
+function createOfferListTemplate(offers, checkedOffersId) {
+  return offers.length > 0 ?
     `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
@@ -50,6 +50,7 @@ function createDescriptionTemplate(description) {
 }
 
 function createFormEditTemplate(point, offers, destination) {
+
   const { id, basePrice, dateFrom, dateTo, offers: checkedOffersId, type } = point;
   const { name, description, pictures } = destination;
 
@@ -66,7 +67,7 @@ function createFormEditTemplate(point, offers, destination) {
                     <div class="event__type-list">
                       <fieldset class="event__type-group">
                         <legend class="visually-hidden">Event type</legend>
-                        ${POINTS_TYPE.map((pointType) => createTypeItemTemplate(id, pointType, type)).join('')}
+                        ${POINTS_TYPES.map((pointType) => createTypeItemTemplate(id, pointType, type)).join('')}
                       </fieldset>
                     </div>
                   </div>
@@ -77,7 +78,7 @@ function createFormEditTemplate(point, offers, destination) {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${name}" list="destination-list-${id}">
                     <datalist id="destination-list-${id}">
-                      ${CITYS.map((city) => `<option value='${city}'></option>`).join('')}
+                      ${CITIES.map((city) => `<option value='${city}'></option>`).join('')}
                     </datalist>
                   </div>
 
@@ -104,7 +105,7 @@ function createFormEditTemplate(point, offers, destination) {
                   </button>
                 </header>
                 <section class="event__details">
-                ${createOfferListTemplate(offers, checkedOffersId)}
+                ${createOfferListTemplate(offers.offers, checkedOffersId)}
                 <section class="event__section  event__section--destination">
                   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     ${createDescriptionTemplate(description)}

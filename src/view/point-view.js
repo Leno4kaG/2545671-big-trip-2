@@ -2,8 +2,8 @@ import { createElement } from '../render.js';
 import { humanizeDueDate, getDifferenceInTime } from '../utils.js';
 import { DATE_FORMAT } from '../consts.js';
 
-function createOfferTemplate(offers) {
-  return offers.length !== 0 ?
+function createOffersTemplate(offers) {
+  return Object.keys(offers).length > 0 ?
     `<li class="event__offer">
         <span class="event__offer-title">${offers.title}</span>
         &plus;&euro;&nbsp;
@@ -12,7 +12,7 @@ function createOfferTemplate(offers) {
     : '';
 }
 
-function createPointTemplate(point, { offers }, destination) {
+function createPointTemplate(point, offers, destination) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
   const { name } = destination;
 
@@ -36,7 +36,7 @@ function createPointTemplate(point, { offers }, destination) {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                 ${offers.map((offer) => createOfferTemplate(offer)).join('')}
+                 ${offers.offers.map((offer) => createOffersTemplate(offer)).join('')}
                 </ul>
                 <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
                   <span class="visually-hidden">Add to favorite</span>

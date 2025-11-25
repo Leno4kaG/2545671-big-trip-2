@@ -25,11 +25,11 @@ function getDifferenceInTime(start, end) {
 
   if (diffMs < MILLISECONDS_IN_HOUR) {
     return `${minutes}M`;
-  } else if (diffMs < MILLISECONDS_IN_DAY) {
-    return `${hours}H ${minutes}M`;
-  } else {
-    return `${days}D ${hours}H ${minutes}M`;
   }
+  if (diffMs < MILLISECONDS_IN_DAY) {
+    return `${hours}H ${minutes}M`;
+  }
+  return `${days}D ${hours}H ${minutes}M`;
 }
 
 function transformString(string) {

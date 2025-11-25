@@ -6,9 +6,10 @@ import { getDestinations } from '../mock/destinations.js';
 export default class PointModel {
   points = Array.from({ length: POINT_COUNT }, getRandomPoints);
   offers = getOffers();
+
   destinations = getDestinations();
 
-  getPoint() {
+  getPoints() {
     return this.points;
   }
 
