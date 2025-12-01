@@ -4,20 +4,20 @@ import { getOffers } from '../mock/offers.js';
 import { getDestinations } from '../mock/destinations.js';
 
 export default class PointModel {
-  points = Array.from({ length: POINT_COUNT }, getRandomPoints);
-  offers = getOffers();
+  #points = Array.from({ length: POINT_COUNT }, getRandomPoints);
+  #offers = getOffers();
 
-  destinations = getDestinations();
+  #destinations = getDestinations();
 
-  getPoints() {
-    return this.points;
+  get points() {
+    return this.#points;
   }
 
   getOffersByType(type) {
-    return this.offers.find((offer) => offer.type === type);
+    return this.#offers.find((offer) => offer.type === type);
   }
 
   getDestinationsById(id) {
-    return this.destinations.find((destination) => destination.id === id);
+    return this.#destinations.find((destination) => destination.id === id);
   }
 }
