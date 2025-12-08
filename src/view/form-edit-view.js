@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { POINTS_TYPES, DATE_FORMAT, CITIES } from '../consts.js';
-import { humanizeDueDate, transformString } from '../utils.js';
+import { humanizeDueDate, transformString } from '../utils/point.js';
 
 function createTypeItemTemplate(id, pointType, checkedType) {
   const isCheckedType = checkedType === pointType ? 'checked' : '';
@@ -122,14 +122,15 @@ export default class FormEditView extends AbstractView {
   #point = null;
   #offers = null;
   #destination = null;
-  #handleEditClick = null;
-  #handleFormSubmit = null;
+  #handleEditClick = () => { };
+  #handleFormSubmit = () => { };
 
   constructor({ point, offers, destination, onEditButtonClick, onFormSubmit }) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destination = destination;
+
     this.#handleEditClick = onEditButtonClick;
     this.#handleFormSubmit = onFormSubmit;
 
