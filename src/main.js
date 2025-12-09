@@ -7,18 +7,18 @@ import FilterPresenter from './presenter/filter-presenter.js';
 
 
 const pageMain = document.querySelector('.page-main');
-const pageContainer = pageMain.querySelector('.page-body__container');
+const mainContainer = pageMain.querySelector('.page-body__container');
 const tripInfo = document.querySelector('.trip-main');
-const tripFilters = document.querySelector('.trip-main__trip-controls');
-const tripEvents = document.querySelector('.trip-events');
+const filterContainer = document.querySelector('.trip-main__trip-controls');
+const emptyMessagesContainer = document.querySelector('.trip-events');
 
 const pointModel = new PointModel();
 
 render(new TripInfoView(), tripInfo, RenderPosition.AFTERBEGIN);
 
-const filterPresenter = new FilterPresenter({ filterContainer: tripFilters, pointModel });
+const filterPresenter = new FilterPresenter({ filterContainer, pointModel });
 
-const mainPresenter = new MainPresenter({ mainContainer: pageContainer, pointModel }, { emptyMessagesContainer: tripEvents });
+const mainPresenter = new MainPresenter({ mainContainer, emptyMessagesContainer, pointModel });
 
 filterPresenter.init();
 

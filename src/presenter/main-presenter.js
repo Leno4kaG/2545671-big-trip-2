@@ -17,7 +17,7 @@ export default class MainPresenter {
 
   #mainPoints = [];
 
-  constructor({ mainContainer, pointModel }, { emptyMessagesContainer }) {
+  constructor({ mainContainer, emptyMessagesContainer, pointModel }) {
     this.#mainContainer = mainContainer;
     this.#pointModel = pointModel;
     this.#emptyMessagesContainer = emptyMessagesContainer;
@@ -25,7 +25,14 @@ export default class MainPresenter {
 
   init() {
     this.#mainPoints = [...this.#pointModel.points];
-    this.#render();
+
+    if (this.#mainPoints.length === 0) {
+      render(new EmptyFilterMessagesView({ filterType: FilterType.EVERYTHING }), this.#emptyMessagesContainer);
+      return;
+    }
+
+    render(this.#sortComponent, this.#mainContainer);
+    render(this.#listComponent, this.#mainContainer);
 
     this.#mainPoints.forEach((point) => {
       this.#renderPoint(point, this.#pointModel.getOffersByType(point.type), this.#pointModel.getDestinationsById(point.destination));
@@ -69,15 +76,5 @@ export default class MainPresenter {
     }
 
     render(pointComponent, this.#listComponent.element);
-  }
-
-  #render() {
-    if (this.#mainPoints.length === 0) {
-      render(new EmptyFilterMessagesView({ filterType: FilterType.EVERYTHING }), this.#emptyMessagesContainer);
-      return;
-    }
-
-    render(this.#sortComponent, this.#mainContainer);
-    render(this.#listComponent, this.#mainContainer);
   }
 }

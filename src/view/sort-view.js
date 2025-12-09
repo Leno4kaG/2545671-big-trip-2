@@ -1,10 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SORT_TYPE } from '../consts.js';
+import { SortType, DEFAULT_SORT } from '../consts.js';
 
 function createItemSortTemplate(type) {
 
-  const isChecked = SORT_TYPE[0] === type ? 'checked' : '';
-  const isDisabled = (SORT_TYPE[2] === type || SORT_TYPE[4] === type) ? 'disabled' : '';
+  const isChecked = DEFAULT_SORT === type ? 'checked' : '';
+  const isDisabled = SortType.DISABLED_SORT.includes(type) ? 'disabled' : '';
 
   return `<div class="trip-sort__item  trip-sort__item--day">
               <input id="sort-${type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${type}" ${isChecked} ${isDisabled}>
@@ -14,7 +14,7 @@ function createItemSortTemplate(type) {
 
 function createSortTemplate() {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-         ${SORT_TYPE.map((type) => createItemSortTemplate(type)).join('')}
+         ${SortType.SORT_TYPES.map((type) => createItemSortTemplate(type)).join('')}
           </form>`;
 }
 

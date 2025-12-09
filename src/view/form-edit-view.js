@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { POINTS_TYPES, DATE_FORMAT, CITIES } from '../consts.js';
-import { humanizeDueDate, transformString } from '../utils/point.js';
+import { humanizeDueDate, transformString } from '../utils/date.js';
 
 function createTypeItemTemplate(id, pointType, checkedType) {
   const isCheckedType = checkedType === pointType ? 'checked' : '';
