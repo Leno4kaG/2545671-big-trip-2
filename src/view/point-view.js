@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeDueDate, getDifferenceInTime } from '../utils.js';
+import { humanizeDueDate, getDifferenceInTime } from '../utils/date.js';
 import { DATE_FORMAT } from '../consts.js';
 
 function createOffersTemplate(offers) {
@@ -55,7 +55,7 @@ export default class PointView extends AbstractView {
   #point = null;
   #offers = null;
   #destination = null;
-  #handleEditClick = null;
+  #handleEditClick = () => { };
 
   constructor({ point, offers, destination, onEditButtonClick }) {
     super();

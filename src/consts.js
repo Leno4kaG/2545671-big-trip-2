@@ -1,4 +1,4 @@
-export const POINT_COUNT = 5;
+export const POINT_COUNT = 4;
 
 export const MILLISECONDS_IN_MINUTE = 60000;
 
@@ -18,3 +18,24 @@ export const POINTS_TYPES = [
 ];
 
 export const CITIES = ['Chamonix', 'Amsterdam', 'Geneva', 'Madrid', 'Istanbul', 'Rio de Janeiro', 'St. Petersburg', 'Paris'];
+
+export const FilterType = {
+  EVERYTHING: 'Everything',
+  FUTURE: 'Future',
+  PRESENT: 'Present',
+  PAST: 'Past'
+};
+
+export const EmptyFilterMessages = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now'
+};
+
+export const SortType = {
+  SORT_TYPES: ['day', 'event', 'time', 'price', 'offers'],
+  DISABLED_SORT: ['time', 'offers']
+};
+
+export const DEFAULT_SORT = SortType.SORT_TYPES[0];

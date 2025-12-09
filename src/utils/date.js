@@ -1,16 +1,11 @@
 import dayjs from 'dayjs';
-import { MILLISECONDS_IN_MINUTE, MILLISECONDS_IN_HOUR, MILLISECONDS_IN_DAY } from './consts.js';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
-function getRandomInteger(minValue, maxValue) {
-  const lower = Math.ceil(Math.min(minValue, maxValue));
-  const upper = Math.floor(Math.max(minValue, maxValue));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
+import { MILLISECONDS_IN_MINUTE, MILLISECONDS_IN_HOUR, MILLISECONDS_IN_DAY } from '../consts.js';
 
 function humanizeDueDate(date, format) {
   return date ? dayjs(date).format(format) : '';
@@ -36,5 +31,16 @@ function transformString(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function isFutureDatePoint(dueDate) {
+  return dueDate && dayjs().isBefore(dueDate);
+}
 
-export { getRandomArrayElement, getRandomInteger, humanizeDueDate, getDifferenceInTime, transformString };
+function isPresentDatePoint(dateFrom, dateTo) {
+  return dayjs().isSameOrAfter(dateFrom) && dayjs().isSameOrBefore(dateTo);
+}
+
+function isPastDatePoint(dueDate) {
+  return dueDate && dayjs(dueDate).isAfter(dayjs());
+}
+
+export { humanizeDueDate, getDifferenceInTime, transformString, isFutureDatePoint, isPresentDatePoint, isPastDatePoint };

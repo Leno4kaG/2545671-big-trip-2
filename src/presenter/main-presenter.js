@@ -2,32 +2,41 @@ import SortView from '../view/sort-view.js';
 import TripListView from '../view/trip-list-view.js';
 import PointView from '../view/point-view.js';
 import FormEditView from '../view/form-edit-view.js';
+import EmptyFilterMessagesView from '../view/empty-filter-messages-view.js';
 
 import { render, replace } from '../framework/render.js';
+import { FilterType } from '../consts.js';
 
 export default class MainPresenter {
-  #container = null;
+  #mainContainer = null;
   #pointModel = null;
+  #emptyMessagesContainer = null;
 
   #sortComponent = new SortView();
   #listComponent = new TripListView();
 
   #mainPoints = [];
 
-  constructor({ container, pointModel }) {
-    this.#container = container;
+  constructor({ mainContainer, emptyMessagesContainer, pointModel }) {
+    this.#mainContainer = mainContainer;
     this.#pointModel = pointModel;
+    this.#emptyMessagesContainer = emptyMessagesContainer;
   }
 
   init() {
     this.#mainPoints = [...this.#pointModel.points];
-    render(this.#sortComponent, this.#container);
-    render(this.#listComponent, this.#container);
 
-
-    for (let i = 1; i < this.#mainPoints.length; i++) {
-      this.#renderPoint(this.#mainPoints[i], this.#pointModel.getOffersByType(this.#mainPoints[i].type), this.#pointModel.getDestinationsById(this.#mainPoints[i].destination));
+    if (this.#mainPoints.length === 0) {
+      render(new EmptyFilterMessagesView({ filterType: FilterType.EVERYTHING }), this.#emptyMessagesContainer);
+      return;
     }
+
+    render(this.#sortComponent, this.#mainContainer);
+    render(this.#listComponent, this.#mainContainer);
+
+    this.#mainPoints.forEach((point) => {
+      this.#renderPoint(point, this.#pointModel.getOffersByType(point.type), this.#pointModel.getDestinationsById(point.destination));
+    });
   }
 
   #renderPoint(point, offers, destination) {
