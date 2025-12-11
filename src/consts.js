@@ -35,7 +35,12 @@ export const EmptyFilterMessages = {
 
 export const SortType = {
   SORT_TYPES: ['day', 'event', 'time', 'price', 'offers'],
-  DISABLED_SORT: ['time', 'offers']
+  DISABLED_SORTS: ['time', 'offers']
 };
 
 export const DEFAULT_SORT = SortType.SORT_TYPES[0];
+
+export const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING'
+};

@@ -4,7 +4,7 @@ import { SortType, DEFAULT_SORT } from '../consts.js';
 function createItemSortTemplate(type) {
 
   const isChecked = DEFAULT_SORT === type ? 'checked' : '';
-  const isDisabled = SortType.DISABLED_SORT.includes(type) ? 'disabled' : '';
+  const isDisabled = SortType.DISABLED_SORTS.includes(type) ? 'disabled' : '';
 
   return `<div class="trip-sort__item  trip-sort__item--day">
               <input id="sort-${type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${type}" ${isChecked} ${isDisabled}>
