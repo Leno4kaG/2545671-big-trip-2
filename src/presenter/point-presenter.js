@@ -6,7 +6,7 @@ import { Mode } from '../consts.js';
 
 export default class PointPresenter {
   #pointListContainer = null;
-  #handleDateChange = null;
+  #handleDataChange = null;
   #handleModeChange = null;
 
   #pointComponent = null;
@@ -17,9 +17,9 @@ export default class PointPresenter {
   #destination = [];
   #mode = Mode.DEFAULT;
 
-  constructor({ pointListContainer, onDateChange, onModeChange }) {
+  constructor({ pointListContainer, onDataChange, onModeChange }) {
     this.#pointListContainer = pointListContainer;
-    this.#handleDateChange = onDateChange;
+    this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
 
@@ -39,8 +39,8 @@ export default class PointPresenter {
 
     this.#formEditComponent = new FormEditView({
       point: this.#point, offers: this.#offers, destination: this.#destination,
-      onEditButtonClick: this.#handleEditFormDeleteSubmit,
-      onFormSubmit: this.#handleEditFormAdditionSubmit
+      onEditButtonClick: this.#handleEditButtonCloseClick,
+      onFormSubmit: this.#handleEditFormSubmit
     });
 
     if (prevPointComponent === null || prevFormEditComponent === null) {
@@ -69,7 +69,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
-      this.#replaceFormToPointCloseForm();
+      this.#replaceFormToPoint();
     }
   }
 
@@ -80,12 +80,7 @@ export default class PointPresenter {
     this.#mode = Mode.EDITING;
   }
 
-  #replaceFormToPointOpenForm() {
-    replace(this.#pointComponent, this.#formEditComponent);
-    document.addEventListener('keydown', this.#escKeyDownHandler);
-  }
-
-  #replaceFormToPointCloseForm() {
+  #replaceFormToPoint() {
     replace(this.#pointComponent, this.#formEditComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
@@ -94,7 +89,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      this.#replaceFormToPointCloseForm();
+      this.#replaceFormToPoint();
     }
   };
 
@@ -103,15 +98,15 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDateChange({ ...this.#point, isFavorite: !this.#point.isFavorite }, this.#offers, this.#destination);
+    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite }, this.#offers, this.#destination);
   };
 
-  #handleEditFormAdditionSubmit = (point) => {
-    this.#handleDateChange(point);
-    this.#replaceFormToPointOpenForm();
+  #handleEditButtonCloseClick = () => {
+    this.#replaceFormToPoint();
   };
 
-  #handleEditFormDeleteSubmit = () => {
-    this.#replaceFormToPointCloseForm();
+  #handleEditFormSubmit = (point) => {
+    this.#replaceFormToPoint();
+    this.#handleDataChange(point);
   };
 }

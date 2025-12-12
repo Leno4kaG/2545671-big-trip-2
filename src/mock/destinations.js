@@ -5,7 +5,7 @@ const mockDestinations = [
     name: 'Chamonix',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?random=0.0762563005163317',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Chamonix parliament building'
       }
     ]
@@ -16,7 +16,7 @@ const mockDestinations = [
     name: 'Amsterdam',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=163317',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Amsterdam'
       }
     ]
@@ -27,7 +27,7 @@ const mockDestinations = [
     name: 'Geneva',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=16',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Geneva'
       }
     ]
@@ -38,7 +38,7 @@ const mockDestinations = [
     name: 'Madrid',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=2458',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Madrid'
       }
     ]
@@ -49,7 +49,7 @@ const mockDestinations = [
     name: 'Istanbul',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=6971',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Istanbul'
       }
     ]
@@ -60,7 +60,7 @@ const mockDestinations = [
     name: 'Rio de Janeiro',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=25936',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Rio de Janeiro'
       }
     ]
@@ -77,7 +77,7 @@ const mockDestinations = [
     name: 'Berlin',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=21',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Berlin'
       }
     ]
@@ -88,7 +88,7 @@ const mockDestinations = [
     name: 'Paris',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?random=9',
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
         description: 'Paris'
       }
     ]
