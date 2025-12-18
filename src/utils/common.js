@@ -9,8 +9,16 @@ function getRandomInteger(minValue, maxValue) {
   return Math.floor(result);
 }
 
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-export { getRandomArrayElement, getRandomInteger, updateItem };
+function sortPointsByPrice(poinA, pointB) {
+  return pointB.basePrice - poinA.basePrice;
+}
+
+export { getRandomArrayElement, getRandomInteger, capitalize, updateItem, sortPointsByPrice };

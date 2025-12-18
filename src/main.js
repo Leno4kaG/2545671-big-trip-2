@@ -21,5 +21,4 @@ const filterPresenter = new FilterPresenter({ filterContainer, pointModel });
 const mainPresenter = new MainPresenter({ mainContainer, emptyMessagesContainer, pointModel });
 
 filterPresenter.init();
-
 mainPresenter.init();

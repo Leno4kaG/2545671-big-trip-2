@@ -1,13 +1,14 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { POINTS_TYPES, DATE_FORMAT, CITIES } from '../consts.js';
-import { humanizeDueDate, transformString } from '../utils/date.js';
+import { humanizeDueDate } from '../utils/date.js';
+import { capitalize } from '../utils/common.js';
 
 function createTypeItemTemplate(id, pointType, checkedType) {
   const isCheckedType = checkedType === pointType ? 'checked' : '';
 
   return `<div class="event__type-item">
       <input id="event-type-${pointType}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${pointType}" ${isCheckedType}>
-      <label class="event__type-label  event__type-label--${pointType}}" for="event-type-${pointType}-${id}">${transformString(pointType)}</label>
+      <label class="event__type-label  event__type-label--${pointType}}" for="event-type-${pointType}-${id}">${capitalize(pointType)}</label>
     </div>`;
 }
 
@@ -144,7 +145,7 @@ export default class FormEditView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(this.#point, this.#offers, this.#destination);
   };
 
   #clickEditButtonHandler = (evt) => {
