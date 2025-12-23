@@ -41,7 +41,7 @@ export const SortTypes = {
   OFFERS: 'offers'
 };
 
-export const DISABLED_SORTS = ['event', 'offers'];
+export const DISABLED_SORTS = [SortTypes.EVENT, SortTypes.OFFERS];
 
 export const DEFAULT_SORT = SortTypes.DAY;
 

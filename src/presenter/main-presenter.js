@@ -31,7 +31,7 @@ export default class MainPresenter {
 
   init() {
     this.#mainPoints = [...this.#pointModel.points];
-    this.#sourceMainPoints = [...this.#pointModel.points];
+    this.#sourceMainPoints = this.#mainPoints;
     this.#renderMain();
   }
 
@@ -65,7 +65,7 @@ export default class MainPresenter {
     render(this.#sortComponent, this.#mainContainer);
   }
 
-  #clearPointList() {
+  #clearPointsList() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
   }
@@ -75,7 +75,7 @@ export default class MainPresenter {
       return;
     }
     this.#sortPoints(sortType);
-    this.#clearPointList();
+    this.#clearPointsList();
     this.#renderPointsList();
   };
 
