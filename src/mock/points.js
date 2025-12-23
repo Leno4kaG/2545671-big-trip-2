@@ -4,8 +4,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2808c',
     basePrice: 1100,
-    dateFrom: '2025-07-10T22:55:56.845Z',
-    dateTo: '2025-07-11T11:22:13.375Z',
+    dateFrom: '2025-07-10T18:25:54.845Z',
+    dateTo: '2025-07-11T11:20:11.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcaa',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [
@@ -16,8 +16,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a703-94eec4a2808a',
     basePrice: 100,
-    dateFrom: '2025-05-10T22:55:56.845Z',
-    dateTo: '2025-05-11T11:22:13.375Z',
+    dateFrom: '2025-05-10T05:35:46.845Z',
+    dateTo: '2025-05-11T12:16:13.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcab',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [
@@ -28,8 +28,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a704-94eec4a2808d',
     basePrice: 800,
-    dateFrom: '2025-06-10T22:55:56.845Z',
-    dateTo: '2025-06-12T11:22:13.375Z',
+    dateFrom: '2025-06-10T02:45:32.845Z',
+    dateTo: '2025-06-12T10:20:23.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcad',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [
@@ -54,8 +54,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a706-94eec4a2808f',
     basePrice: 4000,
-    dateFrom: '2025-11-15T22:55:56.845Z',
-    dateTo: '2025-11-17T11:22:13.375Z',
+    dateFrom: '2025-11-15T12:17:27.845Z',
+    dateTo: '2025-11-17T22:22:23.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcaf',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [
@@ -66,8 +66,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a707-94eec4a2808g',
     basePrice: 4000,
-    dateFrom: '2025-10-05T22:55:56.845Z',
-    dateTo: '2025-10-06T11:22:13.375Z',
+    dateFrom: '2025-10-05T08:54:56.845Z',
+    dateTo: '2025-10-06T11:21:13.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcag',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [
@@ -78,8 +78,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a708-94eec4a2808h',
     basePrice: 1200,
-    dateFrom: '2025-04-12T22:55:56.845Z',
-    dateTo: '2025-04-13T11:22:13.375Z',
+    dateFrom: '2025-04-12T10:15:51.845Z',
+    dateTo: '2025-04-13T11:12:15.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcah',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [
@@ -90,8 +90,8 @@ const mockPoints = [
   {
     id: 'f4b62099-293f-4c3d-a709-94eec4a2808i',
     basePrice: 1100,
-    dateFrom: '2025-08-18T22:55:56.845Z',
-    dateTo: '2025-08-22T11:22:13.375Z',
+    dateFrom: '2025-08-18T16:48:52.845Z',
+    dateTo: '2025-08-22T12:20:17.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcai',
     isFavorite: !!getRandomInteger(0, 1),
     offers: [

@@ -33,12 +33,17 @@ export const EmptyFilterMessages = {
   [FilterType.PAST]: 'There are no past events now'
 };
 
-export const SortType = {
-  SORT_TYPES: ['day', 'event', 'time', 'price', 'offers'],
-  DISABLED_SORTS: ['time', 'offers']
+export const SortTypes = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
 };
 
-export const DEFAULT_SORT = SortType.SORT_TYPES[0];
+export const DISABLED_SORTS = [SortTypes.EVENT, SortTypes.OFFERS];
+
+export const DEFAULT_SORT = SortTypes.DAY;
 
 export const Mode = {
   DEFAULT: 'DEFAULT',

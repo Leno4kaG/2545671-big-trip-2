@@ -27,10 +27,6 @@ function getDifferenceInTime(start, end) {
   return `${days}D ${hours}H ${minutes}M`;
 }
 
-function transformString(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 function isFutureDatePoint(dueDate) {
   return dueDate && dayjs().isBefore(dueDate);
 }
@@ -43,4 +39,8 @@ function isPastDatePoint(dueDate) {
   return dueDate && dayjs(dueDate).isAfter(dayjs());
 }
 
-export { humanizeDueDate, getDifferenceInTime, transformString, isFutureDatePoint, isPresentDatePoint, isPastDatePoint };
+function sortPointsByTime(pointA, pointB) {
+  return dayjs(pointB.dateTo).diff(pointB.dateFrom) - dayjs(pointA.dateTo).diff(pointA.dateFrom);
+}
+
+export { humanizeDueDate, getDifferenceInTime, isFutureDatePoint, isPresentDatePoint, isPastDatePoint, sortPointsByTime };
