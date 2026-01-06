@@ -9,6 +9,15 @@ function getRandomInteger(minValue, maxValue) {
   return Math.floor(result);
 }
 
+function getOffersByType(allOffers, type) {
+  return allOffers.find((offer) => offer.type === type);
+}
+
+function getDestinationsById(elements, id) {
+
+  return elements.find((element) => element.id === id);
+}
+
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -21,4 +30,5 @@ function sortPointsByPrice(poinA, pointB) {
   return pointB.basePrice - poinA.basePrice;
 }
 
-export { getRandomArrayElement, getRandomInteger, capitalize, updateItem, sortPointsByPrice };
+export { getRandomArrayElement, getRandomInteger, getOffersByType, getDestinationsById,
+  capitalize, updateItem, sortPointsByPrice };

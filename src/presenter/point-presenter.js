@@ -14,31 +14,31 @@ export default class PointPresenter {
 
   #point = null;
   #offers = [];
-  #destination = [];
+  #destinations = [];
   #mode = Mode.DEFAULT;
 
-  constructor({ pointListContainer, onDataChange, onModeChange }) {
+  constructor({ pointListContainer, onDataChange, onModeChange, offers, destinations }) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
+    this.#offers = offers;
+    this.#destinations = destinations;
   }
 
-  init(point, offers, destination) {
+  init(point) {
     this.#point = point;
-    this.#offers = offers;
-    this.#destination = destination;
 
     const prevPointComponent = this.#pointComponent;
     const prevFormEditComponent = this.#formEditComponent;
 
     this.#pointComponent = new PointView({
-      point: this.#point, offers: this.#offers, destination: this.#destination,
+      point: this.#point, offers: this.#offers, destinations: this.#destinations,
       onFavoriteClick: this.#handleFavoriteClick,
       onEditButtonClick: this.#handleEditButtonClick
     });
 
     this.#formEditComponent = new FormEditView({
-      point: this.#point, offers: this.#offers, destination: this.#destination,
+      point: this.#point, offers: this.#offers, destinations: this.#destinations,
       onEditButtonClick: this.#handleEditButtonCloseClick,
       onFormSubmit: this.#handleEditFormSubmit
     });
@@ -62,15 +62,16 @@ export default class PointPresenter {
     remove(prevFormEditComponent);
   }
 
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#formEditComponent.reset(this.#point);
+      this.#replaceFormToPoint();
+    }
+  }
+
   destroy() {
     remove(this.#pointComponent);
     remove(this.#formEditComponent);
-  }
-
-  resetView() {
-    if (this.#mode !== Mode.DEFAULT) {
-      this.#replaceFormToPoint();
-    }
   }
 
   #replacePointToForm() {
@@ -89,6 +90,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#formEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -98,15 +100,15 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite }, this.#offers, this.#destination);
+    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleEditButtonCloseClick = () => {
     this.#replaceFormToPoint();
   };
 
-  #handleEditFormSubmit = (point, offers, destination) => {
+  #handleEditFormSubmit = (point) => {
     this.#replaceFormToPoint();
-    this.#handleDataChange(point, offers, destination);
+    this.#handleDataChange(point);
   };
 }

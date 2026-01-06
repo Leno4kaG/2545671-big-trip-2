@@ -16,7 +16,7 @@ const mockDestinations = [
     name: 'Amsterdam',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        src: 'https://loremflickr.com/248/152?random=2',
         description: 'Amsterdam'
       }
     ]
@@ -27,7 +27,7 @@ const mockDestinations = [
     name: 'Geneva',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        src: 'https://loremflickr.com/248/152?random=3',
         description: 'Geneva'
       }
     ]
@@ -38,7 +38,7 @@ const mockDestinations = [
     name: 'Madrid',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        src: 'https://loremflickr.com/248/152?random=5',
         description: 'Madrid'
       }
     ]
@@ -49,7 +49,7 @@ const mockDestinations = [
     name: 'Istanbul',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        src: 'https://loremflickr.com/248/152?random=9',
         description: 'Istanbul'
       }
     ]
@@ -60,7 +60,7 @@ const mockDestinations = [
     name: 'Rio de Janeiro',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        src: 'https://loremflickr.com/248/152?random=7',
         description: 'Rio de Janeiro'
       }
     ]
@@ -77,7 +77,7 @@ const mockDestinations = [
     name: 'Berlin',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        src: 'https://loremflickr.com/248/152?random=10',
         description: 'Berlin'
       }
     ]

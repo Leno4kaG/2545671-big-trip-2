@@ -13,6 +13,8 @@ import { FilterType, DEFAULT_SORT, SortTypes } from '../consts.js';
 export default class MainPresenter {
   #mainContainer = null;
   #pointModel = null;
+  #offers = [];
+  #destinations = [];
   #emptyMessagesContainer = null;
 
   #sortComponent = null;
@@ -31,7 +33,9 @@ export default class MainPresenter {
 
   init() {
     this.#mainPoints = [...this.#pointModel.points];
-    this.#sourceMainPoints = this.#mainPoints;
+    this.#offers = [...this.#pointModel.offers];
+    this.#destinations = [...this.#pointModel.destinations];
+    this.#sourceMainPoints = [...this.#pointModel.points];
     this.#renderMain();
   }
 
@@ -39,10 +43,10 @@ export default class MainPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handlePointChange = (updatedPoint, offers, destination) => {
+  #handlePointChange = (updatedPoint) => {
     this.#mainPoints = updateItem(this.#mainPoints, updatedPoint);
     this.#sourceMainPoints = updateItem(this.#sourceMainPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, offers, destination);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
   #sortPoints(sortType) {
@@ -79,18 +83,23 @@ export default class MainPresenter {
     this.#renderPointsList();
   };
 
+  #renderPoint(point) {
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#listComponent.element,
+      onDataChange: this.#handlePointChange,
+      onModeChange: this.#handelModeChange,
+      offers: this.#offers,
+      destinations: this.#destinations });
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  }
+
   #renderPointsList() {
     render(this.#listComponent, this.#mainContainer);
 
     this.#mainPoints.forEach((point) => {
-      this.#renderPoint(point, this.#pointModel.getOffersByType(point.type), this.#pointModel.getDestinationsById(point.destination));
+      this.#renderPoint(point);
     });
-  }
-
-  #renderPoint(point, offers, destination) {
-    const pointPresenter = new PointPresenter({ pointListContainer: this.#listComponent.element, onDataChange: this.#handlePointChange, onModeChange: this.#handelModeChange });
-    pointPresenter.init(point, offers, destination);
-    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
   #renderMain() {
