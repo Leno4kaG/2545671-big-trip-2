@@ -5,7 +5,6 @@ import PointModel from './model/point-model.js';
 import { RenderPosition, render } from './framework/render.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 
-
 const pageMain = document.querySelector('.page-main');
 const mainContainer = pageMain.querySelector('.page-body__container');
 const tripInfo = document.querySelector('.trip-main');
