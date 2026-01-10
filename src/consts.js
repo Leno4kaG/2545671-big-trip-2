@@ -11,6 +11,7 @@ export const DATE_FORMAT = {
   MONTH_DAY: 'MMM DD',
   HOUR_MINUTES: 'HH:mm',
   DAY_MONTH_YEAR_TIME: 'DD/MM/YY[&nbsp;]HH:mm',
+  DATE_PICKER: 'd/m/y H:i'
 };
 
 export const POINTS_TYPES = [
