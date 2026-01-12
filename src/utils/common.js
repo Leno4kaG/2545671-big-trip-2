@@ -1,3 +1,6 @@
+import { SortTypes } from '../consts.js';
+import { sortByDate, sortPointsByTime } from './date.js';
+
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -30,5 +33,19 @@ function sortPointsByPrice(poinA, pointB) {
   return pointB.basePrice - poinA.basePrice;
 }
 
+function sortPoints (sortType, points) {
+  switch (sortType) {
+    case SortTypes.DAY:
+      points.sort(sortByDate);
+      break;
+    case SortTypes.TIME:
+      points.sort(sortPointsByTime);
+      break;
+    case SortTypes.PRICE:
+      points.sort(sortPointsByPrice);
+      break;
+  }
+}
+
 export { getRandomArrayElement, getRandomInteger, getOffersByType, getDestinationsById,
-  capitalize, updateItem, sortPointsByPrice };
+  capitalize, updateItem, sortPoints };

@@ -18,8 +18,6 @@ export const POINTS_TYPES = [
   'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
 ];
 
-export const CITIES = ['Chamonix', 'Amsterdam', 'Geneva', 'Madrid', 'Istanbul', 'Rio de Janeiro', 'St. Petersburg', 'Paris'];
-
 export const FilterType = {
   EVERYTHING: 'Everything',
   FUTURE: 'Future',
@@ -49,4 +47,16 @@ export const DEFAULT_SORT = SortTypes.DAY;
 export const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING'
+};
+
+export const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };
