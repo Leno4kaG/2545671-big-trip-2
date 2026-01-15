@@ -5,6 +5,7 @@ import { getOffersByType, getDestinationsById, capitalize } from '../utils/commo
 import { humanizeDueDate } from '../utils/date.js';
 
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -88,7 +89,7 @@ function createNewFormTemplate(point, offers, destinations) {
                     <label class="event__label  event__type-output" for="event-destination-${id}">
                      ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${name ? name : ''}" list="destination-list-${id}">
+                    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(name || '')}" list="destination-list-${id}">
                     <datalist id="destination-list-${id}">
                       ${destinations.map((city) => `<option value='${city.name}'></option>`).join('')}
                     </datalist>
@@ -107,7 +108,7 @@ function createNewFormTemplate(point, offers, destinations) {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
+                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice} pattern="[0-9]+" required>
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -209,10 +210,11 @@ export default class NewFormView extends AbstractStatefulView {
   };
 
   #priceChangeHandler = (evt) => {
-    evt.preventDefault();
-    this._setState({
-      basePrice: evt.target.value
-    });
+    if (evt.target.checkValidity()) {
+      this._setState({ basePrice: evt.target.value });
+    } else {
+      evt.target.value = this._state.basePrice;
+    }
   };
 
   #buttonDeleteClickHandler = (evt) => {

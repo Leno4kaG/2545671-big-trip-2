@@ -5,6 +5,7 @@ import { humanizeDueDate } from '../utils/date.js';
 import { capitalize, getOffersByType, getDestinationsById } from '../utils/common.js';
 
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -55,7 +56,7 @@ function createPhotosTemplate(pictures) {
 
 function createDescriptionTemplate(description) {
 
-  return description.length > 0 ? `<p class="event__destination-description">${description}</p>` : '';
+  return description.length > 0 ? `<p class="event__destination-description">${he.encode(description)}</p>` : '';
 }
 
 function createFormEditTemplate(point, offers, destinations) {
@@ -106,7 +107,7 @@ function createFormEditTemplate(point, offers, destinations) {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
+                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}  pattern="[0-9]+" required>
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -230,10 +231,11 @@ export default class FormEditView extends AbstractStatefulView {
   };
 
   #priceChangeHandler = (evt) => {
-    evt.preventDefault();
-    this._setState({
-      basePrice: evt.target.value
-    });
+    if (evt.target.checkValidity()) {
+      this._setState({ basePrice: evt.target.value });
+    } else {
+      evt.target.value = this._state.basePrice;
+    }
   };
 
   #buttonDeleteClickHandler = (evt) => {
