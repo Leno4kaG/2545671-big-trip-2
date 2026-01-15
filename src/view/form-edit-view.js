@@ -135,7 +135,7 @@ export default class FormEditView extends AbstractStatefulView {
 
   #handleEditClick = () => { };
   #handleFormSubmit = () => { };
-  #handleDeleteButtonClick = () => {};
+  #handleDeleteButtonClick = () => { };
 
   #datepickerFrom = null;
   #datepickerTo = null;
@@ -157,9 +157,6 @@ export default class FormEditView extends AbstractStatefulView {
 
     this._setState(FormEditView.parsePointToState(point));
     this._restoreHandlers();
-
-    this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickEditButtonHandler);
   }
 
   get template() {
@@ -169,12 +166,12 @@ export default class FormEditView extends AbstractStatefulView {
   removeElement() {
     super.removeElement();
 
-    if(this.#datepickerFrom) {
+    if (this.#datepickerFrom) {
       this.#datepickerFrom.destroy();
       this.#datepickerFrom = null;
     }
 
-    if(this.#datepickerTo) {
+    if (this.#datepickerTo) {
       this.#datepickerTo.destroy();
       this.#datepickerTo = null;
     }
@@ -214,7 +211,7 @@ export default class FormEditView extends AbstractStatefulView {
 
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
-    const foundDestination = this.#destinations.find((destination) =>destination.name === evt.target.value);
+    const foundDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
     this.updateElement({
       destination: foundDestination.id
     });
@@ -278,7 +275,7 @@ export default class FormEditView extends AbstractStatefulView {
   }
 
   static parsePointToState(point) {
-    return {...point};
+    return { ...point };
   }
 
   static parseStateToPoint(state) {

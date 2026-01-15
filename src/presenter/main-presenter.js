@@ -45,12 +45,11 @@ export default class MainPresenter {
     this.#offers = [...this.#pointModel.offers];
     this.#destinations = [...this.#pointModel.destinations];
     this.#renderNewButton();
-    this.#renderMain();
+    this.#renderBoard();
   }
 
   get points() {
-    const points = [...this.#pointModel.points];
-    return points;
+    return [...this.#pointModel.points];
   }
 
   get offers() {
@@ -66,7 +65,7 @@ export default class MainPresenter {
   };
 
   #handleViewAction = (actionType, updateType, updatedPoint) => {
-    switch(actionType) {
+    switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointModel.updatePoint(updateType, updatedPoint);
         break;
@@ -79,29 +78,29 @@ export default class MainPresenter {
     }
   };
 
-  #handleModelEvent = (updateType, data) => {
-    switch(updateType) {
+  #handleModelEvent = (updateType, point) => {
+    switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresenters.get(data.id).init(data);
+        this.#pointPresenters.get(point.id).init(point);
         break;
       case UpdateType.MINOR:
-        this.#clearMain();
-        this.#renderMain();
+        this.#clearBoard();
+        this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearMain();
+        this.#clearBoard();
         this.init();
         break;
     }
   };
 
   #renderNewButton() {
-    if(this.#addNewButtonComponent) {
+    if (this.#addNewButtonComponent) {
       remove(this.#addNewButtonComponent);
       this.#addNewButtonComponent = null;
     }
 
-    this.#addNewButtonComponent = new NewEventButtonView({onNewButtonClick: this.#handleNewButtonClick});
+    this.#addNewButtonComponent = new NewEventButtonView({ onNewButtonClick: this.#handleNewButtonClick });
     render(this.#addNewButtonComponent, this.#headerContainer);
   }
 
@@ -113,7 +112,7 @@ export default class MainPresenter {
       currentSortType: this.#currentSortType,
     });
 
-    if(prevSortComponent === null) {
+    if (prevSortComponent === null) {
       render(this.#sortComponent, this.#mainContainer);
       return;
     }
@@ -121,7 +120,7 @@ export default class MainPresenter {
     remove(prevSortComponent);
   }
 
-  #clearMain() {
+  #clearBoard() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
   }
@@ -131,8 +130,8 @@ export default class MainPresenter {
       return;
     }
     this.#currentSortType = sortType;
-    this.#clearMain();
-    this.#renderMain();
+    this.#clearBoard();
+    this.#renderBoard();
   };
 
   #handleNewButtonClick = () => {
@@ -145,7 +144,7 @@ export default class MainPresenter {
       onDestroy: this.#handleDestroyForm,
     });
     this.#currentSortType = DEFAULT_SORT;
-    this.#filterModel.setFilter(UserAction.MAJOR, FilterType.EVERYTHING);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     newFormPresenter.init();
   };
 
@@ -159,13 +158,14 @@ export default class MainPresenter {
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
       offers: this.#offers,
-      destinations: this.#destinations });
+      destinations: this.#destinations
+    });
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderEmptyFilterList() {
-    this.#emptyFilterMessagesComponent = new EmptyFilterMessagesView({filterType: EmptyFilterMessages[this.#filterModel.filter.toUpperCase()]});
+  #renderEmptyMessages() {
+    this.#emptyFilterMessagesComponent = new EmptyFilterMessagesView({ filterType: EmptyFilterMessages[this.#filterModel.filter.toUpperCase()] });
     render(this.#emptyFilterMessagesComponent, this.#mainContainer);
   }
 
@@ -177,23 +177,21 @@ export default class MainPresenter {
     });
   }
 
-  #renderMain() {
+  #renderBoard() {
     const filteredPoints = filterPoints(this.#filterModel.filter, this.#pointModel.points);
 
     if (filteredPoints.length === 0) {
       remove(this.#sortComponent);
       this.#sortComponent = null;
-      this.#renderEmptyFilterList();
+      this.#renderEmptyMessages();
       return;
     }
 
     remove(this.#emptyFilterMessagesComponent);
 
-    const pointsToRender = [...filteredPoints];
-
-    sortPoints(this.#currentSortType, pointsToRender);
+    sortPoints(this.#currentSortType, filteredPoints);
 
     this.#renderSort();
-    this.#renderPointsList(pointsToRender);
+    this.#renderPointsList(filteredPoints);
   }
 }

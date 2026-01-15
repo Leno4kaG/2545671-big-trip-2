@@ -1,11 +1,11 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createItemFiltresTemplate({ type, count, isChecked }) {
-  isChecked = (isChecked === true) ? 'isChecked' : '';
+  const isCheckedAtr = isChecked ? 'isChecked' : '';
   const isDisabled = (count === 0) ? 'disabled' : '';
 
   return `<div class="trip-filters__filter">
-                  <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isChecked} ${isDisabled}>
+                  <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" ${isCheckedAtr} ${isDisabled}>
                   <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
                 </div>`;
 }
@@ -20,9 +20,9 @@ function createFiltersTemplate(filters) {
 
 export default class FiltersView extends AbstractView {
   #filters = [];
-  #handelFilterChange = () => {};
+  #handelFilterChange = () => { };
 
-  constructor({filters, onFilterChange}) {
+  constructor({ filters, onFilterChange }) {
     super();
     this.#filters = filters;
     this.#handelFilterChange = onFilterChange;

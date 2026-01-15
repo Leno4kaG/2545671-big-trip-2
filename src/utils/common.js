@@ -33,7 +33,7 @@ function sortPointsByPrice(poinA, pointB) {
   return pointB.basePrice - poinA.basePrice;
 }
 
-function sortPoints (sortType, points) {
+function sortPoints(sortType, points) {
   switch (sortType) {
     case SortTypes.DAY:
       points.sort(sortByDate);
@@ -47,5 +47,7 @@ function sortPoints (sortType, points) {
   }
 }
 
-export { getRandomArrayElement, getRandomInteger, getOffersByType, getDestinationsById,
-  capitalize, updateItem, sortPoints };
+export {
+  getRandomArrayElement, getRandomInteger, getOffersByType, getDestinationsById,
+  capitalize, updateItem, sortPoints
+};

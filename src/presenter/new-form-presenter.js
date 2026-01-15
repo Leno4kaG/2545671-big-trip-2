@@ -13,7 +13,7 @@ export default class NewFormPresenter {
 
   #newFormComponent = null;
 
-  constructor({headerContainer, offers, destinations, onViewAction, onDestroy}) {
+  constructor({ headerContainer, offers, destinations, onViewAction, onDestroy }) {
     this.#headerContainer = headerContainer;
     this.offers = offers;
     this.#destinations = destinations;
@@ -22,11 +22,12 @@ export default class NewFormPresenter {
   }
 
   init() {
-    if(this.#newFormComponent !== null) {
+    if (this.#newFormComponent !== null) {
       return;
     }
 
-    this.#newFormComponent = new NewFormView({offers: this.#offers, destinations: this.#destinations,
+    this.#newFormComponent = new NewFormView({
+      offers: this.#offers, destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick
     });
@@ -34,7 +35,7 @@ export default class NewFormPresenter {
   }
 
   destroy() {
-    if(this.#newFormComponent === null) {
+    if (this.#newFormComponent === null) {
       return;
     }
 
@@ -47,7 +48,7 @@ export default class NewFormPresenter {
   }
 
   #handleFormSubmit = (point) => {
-    this.#handleViewAction(UserAction.ADD_POINT, UpdateType.MAJOR, {id: getRandomInteger(), ...point});
+    this.#handleViewAction(UserAction.ADD_POINT, UpdateType.MAJOR, { id: getRandomInteger(), ...point });
     this.destroy();
   };
 

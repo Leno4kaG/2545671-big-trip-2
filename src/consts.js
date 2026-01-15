@@ -60,3 +60,14 @@ export const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
 };
+
+export const BLANK_POINT = {
+  'id': 0,
+  'basePrice': 0,
+  'dateFrom': '',
+  'dateTo': '',
+  'destination': '',
+  'isFavorite': false,
+  'offers': [],
+  'type': POINTS_TYPES[5].toLowerCase()
+};

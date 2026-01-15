@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 import { humanizeDueDate, getDifferenceInTime } from '../utils/date.js';
 import { getOffersByType, getDestinationsById } from '../utils/common.js';
-import { DATE_FORMAT, UpdateType, UserAction } from '../consts.js';
+import { DATE_FORMAT } from '../consts.js';
 
 function createOffersTemplate(offers) {
 
@@ -87,6 +87,6 @@ export default class PointView extends AbstractView {
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFavoriteClick(UserAction.UPDATE_POINT, UpdateType.PATCH);
+    this.#handleFavoriteClick();
   };
 }
