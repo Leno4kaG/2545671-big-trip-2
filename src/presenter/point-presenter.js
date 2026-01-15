@@ -2,11 +2,11 @@ import PointView from '../view/point-view.js';
 import FormEditView from '../view/form-edit-view.js';
 
 import { render, replace, remove } from '../framework/render.js';
-import { Mode } from '../consts.js';
+import { Mode, UserAction, UpdateType } from '../consts.js';
 
 export default class PointPresenter {
   #pointListContainer = null;
-  #handleDataChange = null;
+  #handleViewAction = null;
   #handleModeChange = null;
 
   #pointComponent = null;
@@ -19,7 +19,7 @@ export default class PointPresenter {
 
   constructor({ pointListContainer, onDataChange, onModeChange, offers, destinations }) {
     this.#pointListContainer = pointListContainer;
-    this.#handleDataChange = onDataChange;
+    this.#handleViewAction = onDataChange;
     this.#handleModeChange = onModeChange;
     this.#offers = offers;
     this.#destinations = destinations;
@@ -40,7 +40,8 @@ export default class PointPresenter {
     this.#formEditComponent = new FormEditView({
       point: this.#point, offers: this.#offers, destinations: this.#destinations,
       onEditButtonClick: this.#handleEditButtonCloseClick,
-      onFormSubmit: this.#handleEditFormSubmit
+      onFormSubmit: this.#handleEditFormSubmit,
+      onButtonDeleteClick: this.#handleButtonDeleteClick,
     });
 
     if (prevPointComponent === null || prevFormEditComponent === null) {
@@ -100,7 +101,7 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleViewAction(UserAction.ADD_POINT, UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleEditButtonCloseClick = () => {
@@ -109,6 +110,10 @@ export default class PointPresenter {
 
   #handleEditFormSubmit = (point) => {
     this.#replaceFormToPoint();
-    this.#handleDataChange(point);
+    this.#handleViewAction(UserAction.UPDATE_POINT, UpdateType.MINOR, point,);
+  };
+
+  #handleButtonDeleteClick = (point) => {
+    this.#handleViewAction(UserAction.DELETE_POINT, UpdateType.MINOR, point);
   };
 }

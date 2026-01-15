@@ -5,6 +5,7 @@ import { humanizeDueDate } from '../utils/date.js';
 import { capitalize, getOffersByType, getDestinationsById } from '../utils/common.js';
 
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -55,7 +56,7 @@ function createPhotosTemplate(pictures) {
 
 function createDescriptionTemplate(description) {
 
-  return description.length > 0 ? `<p class="event__destination-description">${description}</p>` : '';
+  return description.length > 0 ? `<p class="event__destination-description">${he.encode(description)}</p>` : '';
 }
 
 function createFormEditTemplate(point, offers, destinations) {
@@ -106,7 +107,7 @@ function createFormEditTemplate(point, offers, destinations) {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}>
+                    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice}  pattern="[0-9]+" required>
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -135,6 +136,7 @@ export default class FormEditView extends AbstractStatefulView {
 
   #handleEditClick = () => { };
   #handleFormSubmit = () => { };
+  #handleDeleteButtonClick = () => { };
 
   #datepickerFrom = null;
   #datepickerTo = null;
@@ -145,19 +147,17 @@ export default class FormEditView extends AbstractStatefulView {
     dateFormat: DATE_FORMAT.DATE_PICKER
   };
 
-  constructor({ point, offers, destinations, onEditButtonClick, onFormSubmit }) {
+  constructor({ point, offers, destinations, onEditButtonClick, onFormSubmit, onButtonDeleteClick }) {
     super();
 
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleEditClick = onEditButtonClick;
     this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteButtonClick = onButtonDeleteClick;
 
     this._setState(FormEditView.parsePointToState(point));
     this._restoreHandlers();
-
-    this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickEditButtonHandler);
   }
 
   get template() {
@@ -167,12 +167,12 @@ export default class FormEditView extends AbstractStatefulView {
   removeElement() {
     super.removeElement();
 
-    if(this.#datepickerFrom) {
+    if (this.#datepickerFrom) {
       this.#datepickerFrom.destroy();
       this.#datepickerFrom = null;
     }
 
-    if(this.#datepickerTo) {
+    if (this.#datepickerTo) {
       this.#datepickerTo.destroy();
       this.#datepickerTo = null;
     }
@@ -199,6 +199,7 @@ export default class FormEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('change', this.#priceChangeHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#buttonDeleteClickHandler);
     this.#setDatepickers();
   }
 
@@ -211,7 +212,7 @@ export default class FormEditView extends AbstractStatefulView {
 
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
-    const foundDestination = this.#destinations.find((destination) =>destination.name === evt.target.value);
+    const foundDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
     this.updateElement({
       destination: foundDestination.id
     });
@@ -230,10 +231,16 @@ export default class FormEditView extends AbstractStatefulView {
   };
 
   #priceChangeHandler = (evt) => {
+    if (evt.target.checkValidity()) {
+      this._setState({ basePrice: evt.target.value });
+    } else {
+      evt.target.value = this._state.basePrice;
+    }
+  };
+
+  #buttonDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._setState({
-      basePrice: evt.target.value
-    });
+    this.#handleDeleteButtonClick(this._state);
   };
 
   #datepickerFromHandler = ([date]) => {
@@ -269,9 +276,8 @@ export default class FormEditView extends AbstractStatefulView {
     );
   }
 
-
   static parsePointToState(point) {
-    return {...point};
+    return { ...point };
   }
 
   static parseStateToPoint(state) {
