@@ -10,8 +10,7 @@ import { render, replace, remove } from '../framework/render.js';
 
 
 import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType } from '../consts.js';
-import { sortPoints } from '../utils/common.js';
-import { filterPoints } from '../utils/date.js';
+import { sortPoints, filterPoints } from '../utils/common.js';
 
 
 export default class MainPresenter {
@@ -53,11 +52,11 @@ export default class MainPresenter {
   }
 
   get offers() {
-    return this.#pointModel.offers;
+    return [...this.#pointModel.offers];
   }
 
   get destinations() {
-    return this.#pointModel.destinations;
+    return [...this.#pointModel.destinations];
   }
 
   #handleModeChange = () => {
@@ -189,9 +188,9 @@ export default class MainPresenter {
 
     remove(this.#emptyFilterMessagesComponent);
 
-    sortPoints(this.#currentSortType, filteredPoints);
+    const sortedPoints = sortPoints(this.#currentSortType, filteredPoints);
 
     this.#renderSort();
-    this.#renderPointsList(filteredPoints);
+    this.#renderPointsList(sortedPoints);
   }
 }

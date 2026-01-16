@@ -15,7 +15,7 @@ export default class NewFormPresenter {
 
   constructor({ headerContainer, offers, destinations, onViewAction, onDestroy }) {
     this.#headerContainer = headerContainer;
-    this.offers = offers;
+    this.#offers = offers;
     this.#destinations = destinations;
     this.#handleViewAction = onViewAction;
     this.#handleDestroy = onDestroy;
@@ -27,7 +27,8 @@ export default class NewFormPresenter {
     }
 
     this.#newFormComponent = new NewFormView({
-      offers: this.#offers, destinations: this.#destinations,
+      offers: this.#offers,
+      destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick
     });

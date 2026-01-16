@@ -1,5 +1,11 @@
-import { SortTypes } from '../consts.js';
-import { sortByDate, sortPointsByTime } from './date.js';
+import { SortTypes, FilterType } from '../consts.js';
+
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -29,6 +35,40 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
+
+function isFutureDatePoint(dueDate) {
+  return !!dueDate && dayjs(dueDate).isAfter(dayjs());
+}
+
+function isPresentDatePoint(dateFrom, dateTo) {
+  return dayjs().isSameOrAfter(dayjs(dateFrom)) && dayjs().isSameOrBefore(dayjs(dateTo));
+}
+
+function isPastDatePoint(dueDate) {
+  return !!dueDate && dayjs(dueDate).isBefore(dayjs());
+}
+
+function sortByDate(pointA, pointB) {
+  return dayjs(pointA.dateFrom) - dayjs(pointB.dateFrom);
+}
+
+function sortPointsByTime(pointA, pointB) {
+  return dayjs(pointB.dateTo).diff(pointB.dateFrom) - dayjs(pointA.dateTo).diff(pointA.dateFrom);
+}
+
+function filterPoints(type, points) {
+  switch (type) {
+    case FilterType.EVERYTHING:
+      return points;
+    case FilterType.FUTURE:
+      return points.filter((point) => isFutureDatePoint(point.dateFrom));
+    case FilterType.PRESENT:
+      return points.filter((point) => isPresentDatePoint(point.dateFrom, point.dateTo));
+    case FilterType.PAST:
+      return points.filter((point) => isPastDatePoint(point.dateTo));
+  }
+}
+
 function sortPointsByPrice(poinA, pointB) {
   return pointB.basePrice - poinA.basePrice;
 }
@@ -36,18 +76,17 @@ function sortPointsByPrice(poinA, pointB) {
 function sortPoints(sortType, points) {
   switch (sortType) {
     case SortTypes.DAY:
-      points.sort(sortByDate);
-      break;
+      return points.sort(sortByDate);
     case SortTypes.TIME:
-      points.sort(sortPointsByTime);
-      break;
+      return points.sort(sortPointsByTime);
     case SortTypes.PRICE:
-      points.sort(sortPointsByPrice);
-      break;
+      return points.sort(sortPointsByPrice);
+    default:
+      return points;
   }
 }
 
 export {
   getRandomArrayElement, getRandomInteger, getOffersByType, getDestinationsById,
-  capitalize, updateItem, sortPoints
+  capitalize, updateItem, filterPoints, sortPoints
 };
