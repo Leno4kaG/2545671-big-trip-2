@@ -13,7 +13,6 @@ export default class LoadingView extends AbstractView {
   constructor({ message }) {
     super();
     this.#message = message;
-    console.log(this.#message)
   }
 
   get template() {
