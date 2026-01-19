@@ -1,5 +1,3 @@
-export const POINT_COUNT = 4;
-
 export const MILLISECONDS_IN_MINUTE = 60000;
 
 export const MILLISECONDS_IN_HOUR = MILLISECONDS_IN_MINUTE * 60;
@@ -59,15 +57,30 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
+  ERROR: 'ERROR',
 };
 
 export const BLANK_POINT = {
-  'id': 0,
-  'basePrice': 0,
-  'dateFrom': '',
-  'dateTo': '',
-  'destination': '',
-  'isFavorite': false,
-  'offers': [],
-  'type': POINTS_TYPES[5].toLowerCase()
+  id: 0,
+  basePrice: 0,
+  dateFrom: '',
+  dateTo: '',
+  destination: '',
+  isFavorite: false,
+  offers: [],
+  type: POINTS_TYPES[5].toLowerCase()
+};
+
+export const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
+
+export const AUTHORIZATION = 'Basic bD3953Px06iy2j';
+export const BASE_URL = 'https://22.objects.htmlacademy.pro/big-trip';
+
+export const InfoMessage = {
+  LOADING: 'Loading...',
+  ERROR: 'Failed to load latest route information'
 };

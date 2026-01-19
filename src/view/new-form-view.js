@@ -191,9 +191,9 @@ export default class NewFormView extends AbstractStatefulView {
 
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
-    const foundDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    const newDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
     this.updateElement({
-      destination: foundDestination.id
+      destination: newDestination.id
     });
   };
 

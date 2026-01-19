@@ -1,7 +1,7 @@
 import FiltersView from '../view/filters-view.js';
 
 import { remove, render, replace } from '../framework/render.js';
-import { filterPoints } from '../utils/date.js';
+import { filterPoints } from '../utils/common.js';
 import { FilterType, UpdateType } from '../consts.js';
 
 export default class FilterPresenter {
@@ -21,8 +21,8 @@ export default class FilterPresenter {
 
   get filters() {
     return Object.values(FilterType).map((type) => ({
-      type: type,
-      count: (this.#pointModel.points) ? filterPoints(type, this.#pointModel.points).length : 0,
+      type,
+      count: (this.#pointModel.points.length > 0) ? filterPoints(type, this.#pointModel.points) : 0,
       isChecked: type === this.#filterModel.filter,
     }));
   }
@@ -35,7 +35,7 @@ export default class FilterPresenter {
       onFilterChange: this.#handleFilterChange
     });
 
-    if(prevFilterComponent === null) {
+    if (prevFilterComponent === null) {
       render(this.#filterComponent, this.#filterContainer);
       return;
     }
@@ -45,7 +45,7 @@ export default class FilterPresenter {
   }
 
   #handleFilterChange = (filterType) => {
-    if(this.#filterModel.filter !== filterType) {
+    if (this.#filterModel.filter !== filterType) {
       this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
     }
   };

@@ -9,15 +9,18 @@ import NewFormPresenter from './new-form-presenter.js';
 import { render, replace, remove } from '../framework/render.js';
 
 
-import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType } from '../consts.js';
-import { sortPoints } from '../utils/common.js';
-import { filterPoints } from '../utils/date.js';
+import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage } from '../consts.js';
+import { filterPoints, sortPoints } from '../utils/common.js';
+import LoadingView from '../view/loading-view.js';
 
 
 export default class MainPresenter {
   #mainContainer = null;
+  #headerContainer = null;
+
   #pointModel = null;
   #filterModel = null;
+
   #offers = [];
   #destinations = [];
 
@@ -25,7 +28,10 @@ export default class MainPresenter {
   #sortComponent = null;
   #listComponent = new TripListView();
   #addNewButtonComponent = null;
-  #headerContainer = null;
+  #loadingComponent = null;
+  #errorMessageComponent = null;
+
+  #isLoading = true;
 
 
   #pointPresenters = new Map();
@@ -42,8 +48,6 @@ export default class MainPresenter {
   }
 
   init() {
-    this.#offers = [...this.#pointModel.offers];
-    this.#destinations = [...this.#pointModel.destinations];
     this.#renderNewButton();
     this.#renderBoard();
   }
@@ -53,11 +57,11 @@ export default class MainPresenter {
   }
 
   get offers() {
-    return this.#pointModel.offers;
+    return [...this.#pointModel.offers];
   }
 
   get destinations() {
-    return this.#pointModel.destinations;
+    return [...this.#pointModel.destinations];
   }
 
   #handleModeChange = () => {
@@ -90,6 +94,18 @@ export default class MainPresenter {
       case UpdateType.MAJOR:
         this.#clearBoard();
         this.init();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        remove(this.#sortComponent);
+        this.#clearBoard();
+        this.#renderErrorMessage();
         break;
     }
   };
@@ -157,11 +173,21 @@ export default class MainPresenter {
       pointListContainer: this.#listComponent.element,
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
-      offers: this.#offers,
-      destinations: this.#destinations
+      offers: this.offers,
+      destinations: this.destinations
     });
     pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
+  }
+
+  #renderLoading() {
+    this.#loadingComponent = new LoadingView({ message: InfoMessage.LOADING });
+    render(this.#loadingComponent, this.#mainContainer);
+  }
+
+  #renderErrorMessage() {
+    this.#errorMessageComponent = new LoadingView({ message: InfoMessage.ERROR });
+    render(this.#errorMessageComponent, this.#listComponent);
   }
 
   #renderEmptyMessages() {
@@ -178,6 +204,11 @@ export default class MainPresenter {
   }
 
   #renderBoard() {
+    if (this.#isLoading) {
+      remove(this.#errorMessageComponent);
+      this.#renderLoading();
+      return;
+    }
     const filteredPoints = filterPoints(this.#filterModel.filter, this.#pointModel.points);
 
     if (filteredPoints.length === 0) {
@@ -189,9 +220,9 @@ export default class MainPresenter {
 
     remove(this.#emptyFilterMessagesComponent);
 
-    sortPoints(this.#currentSortType, filteredPoints);
+    const sortedPoints = sortPoints(this.#currentSortType, filteredPoints);
 
     this.#renderSort();
-    this.#renderPointsList(filteredPoints);
+    this.#renderPointsList(sortedPoints);
   }
 }
