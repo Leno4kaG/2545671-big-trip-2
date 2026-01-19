@@ -1,7 +1,6 @@
 import NewFormView from '../view/new-form-view.js';
 
 import { UserAction, UpdateType } from '../consts.js';
-import { getRandomInteger } from '../utils/common.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
 
 export default class NewFormPresenter {
@@ -48,9 +47,14 @@ export default class NewFormPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#newFormComponent.updateElement({
+      isSaving: true,
+    });
+  }
+
   #handleFormSubmit = (point) => {
-    this.#handleViewAction(UserAction.ADD_POINT, UpdateType.MAJOR, { id: getRandomInteger(), ...point });
-    this.destroy();
+    this.#handleViewAction(UserAction.ADD_POINT, UpdateType.MAJOR, point);
   };
 
   #handleDeleteClick = () => {
@@ -63,4 +67,13 @@ export default class NewFormPresenter {
       this.destroy();
     }
   };
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#newFormComponent.updateElement({
+        isSaving: false,
+      });
+    };
+    this.#newFormComponent.shake(resetFormState);
+  }
 }

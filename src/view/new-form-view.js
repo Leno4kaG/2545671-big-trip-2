@@ -61,11 +61,11 @@ function createDescriptionTemplate(description) {
 }
 
 function createNewFormTemplate(point, offers, destinations) {
-  const { id, basePrice, dateFrom, dateTo, offers: checkedOffersId, destination, type } = point;
+
+  const { id, basePrice, dateFrom, dateTo, offers: checkedOffersId, destination, type, isSaving } = point;
   const foundOffersByType = getOffersByType(offers, type) || { offers: [] };
   const foundDestinationById = getDestinationsById(destinations, destination) || {};
   const { name, pictures } = foundDestinationById;
-
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -111,7 +111,7 @@ function createNewFormTemplate(point, offers, destinations) {
                     <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice} pattern="[0-9]+" required>
                   </div>
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
                   <button class="event__reset-btn" type="reset">Cancle</button>
 
                 </header>
@@ -266,11 +266,15 @@ export default class NewFormView extends AbstractStatefulView {
   }
 
   static parsePointToState(point) {
-    return { ...point };
+    return {
+      ...point,
+      isSaving: false,
+    };
   }
 
   static parseStateToPoint(state) {
     const point = { ...state };
+    delete point.isDeleting;
     return point;
   }
 }

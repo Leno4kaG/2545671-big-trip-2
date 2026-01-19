@@ -75,6 +75,8 @@ export const BLANK_POINT = {
 export const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 export const AUTHORIZATION = 'Basic bD3953Px06iy2j';
@@ -83,4 +85,9 @@ export const BASE_URL = 'https://22.objects.htmlacademy.pro/big-trip';
 export const InfoMessage = {
   LOADING: 'Loading...',
   ERROR: 'Failed to load latest route information'
+};
+
+export const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000
 };

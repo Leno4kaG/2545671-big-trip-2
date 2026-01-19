@@ -7,9 +7,10 @@ import PointPresenter from './point-presenter.js';
 import NewFormPresenter from './new-form-presenter.js';
 
 import { render, replace, remove } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 
-import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage } from '../consts.js';
+import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage, TimeLimit } from '../consts.js';
 import { filterPoints, sortPoints } from '../utils/common.js';
 import LoadingView from '../view/loading-view.js';
 
@@ -21,9 +22,6 @@ export default class MainPresenter {
   #pointModel = null;
   #filterModel = null;
 
-  #offers = [];
-  #destinations = [];
-
   #emptyFilterMessagesComponent = null;
   #sortComponent = null;
   #listComponent = new TripListView();
@@ -33,8 +31,14 @@ export default class MainPresenter {
 
   #isLoading = true;
 
-
   #pointPresenters = new Map();
+  #newFormPresenter = null;
+
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
+
   #currentSortType = DEFAULT_SORT;
 
   constructor({ mainContainer, headerContainer, pointModel, filterModel }) {
@@ -68,18 +72,35 @@ export default class MainPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = (actionType, updateType, updatedPoint) => {
+  #handleViewAction = async (actionType, updateType, updatedPoint) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoint(updateType, updatedPoint);
+        this.#pointPresenters.get(updatedPoint.id).setSaving();
+        try {
+          await this.#pointModel.updatePoint(updateType, updatedPoint);
+        } catch (err) {
+          this.#pointPresenters.get(updatedPoint.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoint(updateType, updatedPoint);
+        this.#newFormPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, updatedPoint);
+        } catch (err) {
+          this.#newFormPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoint(updateType, updatedPoint);
+        this.#pointPresenters.get(updatedPoint.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, updatedPoint);
+        } catch (err) {
+          this.#pointPresenters.get(updatedPoint.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, point) => {
@@ -152,16 +173,16 @@ export default class MainPresenter {
 
   #handleNewButtonClick = () => {
     this.#addNewButtonComponent.element.disabled = true;
-    const newFormPresenter = new NewFormPresenter({
+    this.#newFormPresenter = new NewFormPresenter({
       headerContainer: this.#listComponent.element,
-      offers: this.#offers,
-      destinations: this.#destinations,
+      offers: this.offers,
+      destinations: this.destinations,
       onViewAction: this.#handleViewAction,
       onDestroy: this.#handleDestroyForm,
     });
     this.#currentSortType = DEFAULT_SORT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    newFormPresenter.init();
+    this.#newFormPresenter.init();
   };
 
   #handleDestroyForm = () => {
