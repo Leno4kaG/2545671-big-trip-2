@@ -6,12 +6,13 @@ import NewEventButtonView from '../view/new-event-button-view.js';
 import PointPresenter from './point-presenter.js';
 import NewFormPresenter from './new-form-presenter.js';
 
-import { render, replace, remove } from '../framework/render.js';
+import { render, replace, remove, RenderPosition } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 
-import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage } from '../consts.js';
+import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage, TimeLimit } from '../consts.js';
 import { filterPoints, sortPoints } from '../utils/common.js';
-import LoadingView from '../view/loading-view.js';
+import MessagesView from '../view/messages-view.js';
 
 
 export default class MainPresenter {
@@ -20,9 +21,6 @@ export default class MainPresenter {
 
   #pointModel = null;
   #filterModel = null;
-
-  #offers = [];
-  #destinations = [];
 
   #emptyFilterMessagesComponent = null;
   #sortComponent = null;
@@ -33,8 +31,14 @@ export default class MainPresenter {
 
   #isLoading = true;
 
-
   #pointPresenters = new Map();
+  #newFormPresenter = null;
+
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
+
   #currentSortType = DEFAULT_SORT;
 
   constructor({ mainContainer, headerContainer, pointModel, filterModel }) {
@@ -68,18 +72,36 @@ export default class MainPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = (actionType, updateType, updatedPoint) => {
+  #handleViewAction = async (actionType, updateType, updatedPoint) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoint(updateType, updatedPoint);
+        this.#pointPresenters.get(updatedPoint.id).setSaving();
+        try {
+          await this.#pointModel.updatePoint(updateType, updatedPoint);
+        } catch (err) {
+          this.#pointPresenters.get(updatedPoint.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoint(updateType, updatedPoint);
+        this.#newFormPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, updatedPoint);
+          this.#closeNewForm();
+        } catch (err) {
+          this.#newFormPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoint(updateType, updatedPoint);
+        this.#pointPresenters.get(updatedPoint.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, updatedPoint);
+        } catch (err) {
+          this.#pointPresenters.get(updatedPoint.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, point) => {
@@ -93,12 +115,13 @@ export default class MainPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard();
-        this.init();
+        this.#renderBoard();
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
-        this.#renderBoard();
+
+        this.init();
         break;
       case UpdateType.ERROR:
         this.#isLoading = false;
@@ -152,21 +175,29 @@ export default class MainPresenter {
 
   #handleNewButtonClick = () => {
     this.#addNewButtonComponent.element.disabled = true;
-    const newFormPresenter = new NewFormPresenter({
+    this.#newFormPresenter = new NewFormPresenter({
       headerContainer: this.#listComponent.element,
-      offers: this.#offers,
-      destinations: this.#destinations,
+      offers: this.offers,
+      destinations: this.destinations,
       onViewAction: this.#handleViewAction,
       onDestroy: this.#handleDestroyForm,
     });
     this.#currentSortType = DEFAULT_SORT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    newFormPresenter.init();
+    this.#newFormPresenter.init();
+
   };
 
   #handleDestroyForm = () => {
     this.#addNewButtonComponent.element.disabled = false;
   };
+
+  #closeNewForm() {
+    if (this.#newFormPresenter !== null) {
+      this.#newFormPresenter.destroy();
+      this.#newFormPresenter = null;
+    }
+  }
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
@@ -181,17 +212,17 @@ export default class MainPresenter {
   }
 
   #renderLoading() {
-    this.#loadingComponent = new LoadingView({ message: InfoMessage.LOADING });
+    this.#loadingComponent = new MessagesView({ message: InfoMessage.LOADING });
     render(this.#loadingComponent, this.#mainContainer);
   }
 
   #renderErrorMessage() {
-    this.#errorMessageComponent = new LoadingView({ message: InfoMessage.ERROR });
+    this.#errorMessageComponent = new MessagesView({ message: InfoMessage.ERROR });
     render(this.#errorMessageComponent, this.#listComponent);
   }
 
   #renderEmptyMessages() {
-    this.#emptyFilterMessagesComponent = new EmptyFilterMessagesView({ filterType: EmptyFilterMessages[this.#filterModel.filter.toUpperCase()] });
+    this.#emptyFilterMessagesComponent = new EmptyFilterMessagesView({ filterType: EmptyFilterMessages.EVERYTHING });
     render(this.#emptyFilterMessagesComponent, this.#mainContainer);
   }
 
@@ -210,7 +241,6 @@ export default class MainPresenter {
       return;
     }
     const filteredPoints = filterPoints(this.#filterModel.filter, this.#pointModel.points);
-
     if (filteredPoints.length === 0) {
       remove(this.#sortComponent);
       this.#sortComponent = null;

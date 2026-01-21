@@ -20,11 +20,11 @@ function createTypeItemTemplate(id, pointType, checkedType) {
 
 function createOffersTemplate(offers, checkedOffersId) {
   const { id, title, price } = offers;
-  const isCheckedOffers = Array.isArray(checkedOffersId) && checkedOffersId.includes(id) ? 'checked' : '';
+  const isCheckedOffers = checkedOffersId.includes(id) ? 'checked' : '';
 
   return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" data-id="${id}" id="${id}" type="checkbox" name="${id}" ${isCheckedOffers}>
-      <label class="event__offer-label" for="${id}">
+      <input class="event__offer-checkbox visually-hidden" data-id="${id}" id="offer-${id}" type="checkbox" name="offer-${id}" ${isCheckedOffers}>
+      <label class="event__offer-label" for="offer-${id}">
         <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
@@ -61,11 +61,11 @@ function createDescriptionTemplate(description) {
 }
 
 function createNewFormTemplate(point, offers, destinations) {
-  const { id, basePrice, dateFrom, dateTo, offers: checkedOffersId, destination, type } = point;
+
+  const { id, basePrice, dateFrom, dateTo, offers: checkedOffersId, destination, type, isSaving } = point;
   const foundOffersByType = getOffersByType(offers, type) || { offers: [] };
   const foundDestinationById = getDestinationsById(destinations, destination) || {};
   const { name, pictures } = foundDestinationById;
-
 
   return `<li class="trip-events__item">
             <form class="event event--edit" action="#" method="post">
@@ -111,7 +111,7 @@ function createNewFormTemplate(point, offers, destinations) {
                     <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value=${basePrice} pattern="[0-9]+" required>
                   </div>
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
                   <button class="event__reset-btn" type="reset">Cancle</button>
 
                 </header>
@@ -211,7 +211,9 @@ export default class NewFormView extends AbstractStatefulView {
 
   #priceChangeHandler = (evt) => {
     if (evt.target.checkValidity()) {
-      this._setState({ basePrice: evt.target.value });
+      const value = evt.target.value;
+      const numeric = value === '' ? '' : Number(value);
+      this._setState({ basePrice: numeric });
     } else {
       evt.target.value = this._state.basePrice;
     }
@@ -266,11 +268,15 @@ export default class NewFormView extends AbstractStatefulView {
   }
 
   static parsePointToState(point) {
-    return { ...point };
+    return {
+      ...point,
+      isSaving: false,
+    };
   }
 
   static parseStateToPoint(state) {
     const point = { ...state };
+    delete point.isSaving;
     return point;
   }
 }

@@ -1,9 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { EmptyFilterMessages } from '../consts.js';
 
 function createEmptyFilterTemplate(filterType) {
   return (`
-    <p class="trip-events__msg">${EmptyFilterMessages[filterType]}</p>
+    <p class="trip-events__msg">${filterType}</p>
     `);
 }
 
