@@ -32,6 +32,7 @@ export default class NewFormPresenter {
       onDeleteClick: this.#handleDeleteClick
     });
     render(this.#newFormComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   destroy() {
@@ -45,12 +46,6 @@ export default class NewFormPresenter {
     this.#newFormComponent = null;
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
-  }
-
-  setSaving() {
-    this.#newFormComponent.updateElement({
-      isSaving: true,
-    });
   }
 
   #handleFormSubmit = (point) => {
@@ -68,10 +63,16 @@ export default class NewFormPresenter {
     }
   };
 
+  setSaving() {
+    this.#newFormComponent.updateElement({
+      isSaving: true
+    });
+  }
+
   setAborting() {
     const resetFormState = () => {
       this.#newFormComponent.updateElement({
-        isSaving: false,
+        isSaving: false
       });
     };
     this.#newFormComponent.shake(resetFormState);

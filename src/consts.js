@@ -62,7 +62,7 @@ export const UpdateType = {
 };
 
 export const BLANK_POINT = {
-  id: 0,
+  //id: 0,
   basePrice: 0,
   dateFrom: '',
   dateTo: '',
@@ -79,7 +79,7 @@ export const Method = {
   DELETE: 'DELETE',
 };
 
-export const AUTHORIZATION = 'Basic bD3953Px06iy2j';
+export const AUTHORIZATION = 'Basic bD3953Px06ia3p';
 export const BASE_URL = 'https://22.objects.htmlacademy.pro/big-trip';
 
 export const InfoMessage = {

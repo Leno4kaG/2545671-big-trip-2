@@ -1,13 +1,13 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 
-function createLoadingTemplate(message) {
+function createMessagesTemplate(message) {
   return (`
     <p class="trip-events__msg">${message}</p>
     `);
 }
 
-export default class LoadingView extends AbstractView {
+export default class MessagesView extends AbstractView {
   #message = null;
 
   constructor({ message }) {
@@ -16,6 +16,6 @@ export default class LoadingView extends AbstractView {
   }
 
   get template() {
-    return createLoadingTemplate(this.#message);
+    return createMessagesTemplate(this.#message);
   }
 }

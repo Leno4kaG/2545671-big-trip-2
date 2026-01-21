@@ -7,17 +7,6 @@ import dayjs from 'dayjs';
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-function getRandomInteger(minValue, maxValue) {
-  const lower = Math.ceil(Math.min(minValue, maxValue));
-  const upper = Math.floor(Math.max(minValue, maxValue));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
-
 function getOffersByType(allOffers, type) {
   return allOffers.find((offer) => offer.type === type);
 }
@@ -76,17 +65,16 @@ function sortPointsByPrice(poinA, pointB) {
 function sortPoints(sortType, points) {
   switch (sortType) {
     case SortTypes.DAY:
-      return points.sort(sortByDate);
+      return points.slice().sort(sortByDate);
     case SortTypes.TIME:
-      return points.sort(sortPointsByTime);
+      return points.slice().sort(sortPointsByTime);
     case SortTypes.PRICE:
-      return points.sort(sortPointsByPrice);
+      return points.slice().sort(sortPointsByPrice);
     default:
       return points;
   }
 }
 
 export {
-  getRandomArrayElement, getRandomInteger, getOffersByType, getDestinationsById,
-  capitalize, updateItem, filterPoints, sortPoints
+  getOffersByType, getDestinationsById, capitalize, updateItem, filterPoints, sortPoints
 };

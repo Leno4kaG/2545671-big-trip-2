@@ -24,8 +24,8 @@ function createOffersTemplate(offers, checkedOffersId) {
   const isCheckedOffers = checkedOffersId.includes(id) ? 'checked' : '';
 
   return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id=${id} type="checkbox" name=${id} ${isCheckedOffers}>
-      <label class="event__offer-label" for=${id}>
+      <input class="event__offer-checkbox visually-hidden" data-id="${id}" id="offer-${id}" type="checkbox" name="offer-${id}" ${isCheckedOffers}>
+      <label class="event__offer-label" for="offer-${id}">
         <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>

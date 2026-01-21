@@ -102,7 +102,7 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleViewAction(UserAction.ADD_POINT, UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleViewAction(UserAction.UPDATE_POINT, UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleEditButtonCloseClick = () => {
@@ -110,8 +110,8 @@ export default class PointPresenter {
   };
 
   #handleEditFormSubmit = (point) => {
-    this.#replaceFormToPoint();
     this.#handleViewAction(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleButtonDeleteClick = (point) => {
