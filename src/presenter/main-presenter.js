@@ -6,7 +6,7 @@ import NewEventButtonView from '../view/new-event-button-view.js';
 import PointPresenter from './point-presenter.js';
 import NewFormPresenter from './new-form-presenter.js';
 
-import { render, replace, remove, RenderPosition } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 

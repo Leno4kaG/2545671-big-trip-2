@@ -22,5 +22,4 @@ function getDifferenceInTime(start, end) {
   return `${days}D ${hours}H ${minutes}M`;
 }
 
-
 export { humanizeDueDate, getDifferenceInTime };
