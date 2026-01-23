@@ -13,13 +13,15 @@ function getDifferenceInTime(start, end) {
   const hours = Math.floor((diffMs % MILLISECONDS_IN_DAY) / MILLISECONDS_IN_HOUR);
   const minutes = Math.floor((diffMs % MILLISECONDS_IN_HOUR) / MILLISECONDS_IN_MINUTE);
 
+  const pad = (num) => String(num).padStart(2, '0');
+
   if (diffMs < MILLISECONDS_IN_HOUR) {
-    return `${minutes}M`;
+    return `${pad(minutes)}m`;
   }
   if (diffMs < MILLISECONDS_IN_DAY) {
-    return `${hours}H ${minutes}M`;
+    return `${pad(hours)}h ${pad(minutes)}m`;
   }
-  return `${days}D ${hours}H ${minutes}M`;
+  return `${pad(days)}d ${pad(hours)}h ${pad(minutes)}m`;
 }
 
 export { humanizeDueDate, getDifferenceInTime };

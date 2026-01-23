@@ -2,6 +2,7 @@ import SortView from '../view/sort-view.js';
 import TripListView from '../view/trip-list-view.js';
 import EmptyFilterMessagesView from '../view/empty-filter-messages-view.js';
 import NewEventButtonView from '../view/new-event-button-view.js';
+import MessagesView from '../view/messages-view.js';
 
 import PointPresenter from './point-presenter.js';
 import NewFormPresenter from './new-form-presenter.js';
@@ -9,10 +10,9 @@ import NewFormPresenter from './new-form-presenter.js';
 import { render, replace, remove } from '../framework/render.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
-
 import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage, TimeLimit } from '../consts.js';
 import { filterPoints, sortPoints } from '../utils/common.js';
-import MessagesView from '../view/messages-view.js';
+
 
 
 export default class MainPresenter {
@@ -114,14 +114,15 @@ export default class MainPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
+        this.#currentSortType = DEFAULT_SORT;
         this.#clearBoard();
         this.#renderBoard();
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
-
-        this.init();
+        this.#renderNewButton();
+        this.#renderBoard();
         break;
       case UpdateType.ERROR:
         this.#isLoading = false;
@@ -138,7 +139,6 @@ export default class MainPresenter {
       remove(this.#addNewButtonComponent);
       this.#addNewButtonComponent = null;
     }
-
     this.#addNewButtonComponent = new NewEventButtonView({ onNewButtonClick: this.#handleNewButtonClick });
     render(this.#addNewButtonComponent, this.#headerContainer);
   }
@@ -174,7 +174,19 @@ export default class MainPresenter {
   };
 
   #handleNewButtonClick = () => {
+    this.#handleModeChange();
     this.#addNewButtonComponent.element.disabled = true;
+    this.#currentSortType = DEFAULT_SORT;
+
+    if (!this.#listComponent.element.isConnected) {
+      render(this.#listComponent, this.#mainContainer);
+      return;
+    }
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    if (this.#emptyFilterMessagesComponent) {
+      remove(this.#emptyFilterMessagesComponent);
+      this.#emptyFilterMessagesComponent = null;
+    }
     this.#newFormPresenter = new NewFormPresenter({
       headerContainer: this.#listComponent.element,
       offers: this.offers,
@@ -182,10 +194,7 @@ export default class MainPresenter {
       onViewAction: this.#handleViewAction,
       onDestroy: this.#handleDestroyForm,
     });
-    this.#currentSortType = DEFAULT_SORT;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newFormPresenter.init();
-
   };
 
   #handleDestroyForm = () => {
@@ -218,16 +227,18 @@ export default class MainPresenter {
 
   #renderErrorMessage() {
     this.#errorMessageComponent = new MessagesView({ message: InfoMessage.ERROR });
-    render(this.#errorMessageComponent, this.#listComponent);
+    render(this.#errorMessageComponent, this.#mainContainer);
   }
 
   #renderEmptyMessages() {
-    this.#emptyFilterMessagesComponent = new EmptyFilterMessagesView({ filterType: EmptyFilterMessages.EVERYTHING });
+    this.#emptyFilterMessagesComponent = new EmptyFilterMessagesView({ filterType: EmptyFilterMessages[this.#filterModel.filter] });
     render(this.#emptyFilterMessagesComponent, this.#mainContainer);
   }
 
   #renderPointsList(pointsToRender) {
-    render(this.#listComponent, this.#mainContainer);
+    if (!this.#listComponent.element.isConnected) {
+      render(this.#listComponent, this.#mainContainer);
+    }
 
     pointsToRender.forEach((point) => {
       this.#renderPoint(point);
@@ -244,10 +255,14 @@ export default class MainPresenter {
     if (filteredPoints.length === 0) {
       remove(this.#sortComponent);
       this.#sortComponent = null;
+
+      if (!this.#listComponent.element.isConnected) {
+        render(this.#listComponent, this.#mainContainer);
+      }
+
       this.#renderEmptyMessages();
       return;
     }
-
     remove(this.#emptyFilterMessagesComponent);
 
     const sortedPoints = sortPoints(this.#currentSortType, filteredPoints);

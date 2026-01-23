@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createItemFiltersTemplate({ type, count, isChecked }) {
-  const isCheckedAtr = isChecked ? 'isChecked' : '';
+  const isCheckedAtr = isChecked ? 'checked' : '';
   const isDisabled = (count === 0) ? 'disabled' : '';
 
   return `<div class="trip-filters__filter">

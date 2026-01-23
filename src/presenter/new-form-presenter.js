@@ -39,12 +39,9 @@ export default class NewFormPresenter {
     if (this.#newFormComponent === null) {
       return;
     }
-
-    this.#handleDestroy();
-
     remove(this.#newFormComponent);
     this.#newFormComponent = null;
-
+    this.#handleDestroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 

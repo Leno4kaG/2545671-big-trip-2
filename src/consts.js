@@ -18,10 +18,10 @@ export const POINTS_TYPES = [
 ];
 
 export const FilterType = {
-  EVERYTHING: 'Everything',
-  FUTURE: 'Future',
-  PRESENT: 'Present',
-  PAST: 'Past'
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
 };
 
 export const EmptyFilterMessages = {
@@ -92,3 +92,5 @@ export const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000
 };
+
+export const MAX_DESTINATIONS_TO_RENDER = 3;

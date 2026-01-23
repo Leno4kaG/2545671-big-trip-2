@@ -3,7 +3,7 @@ import TripInfoView from '../view/trip-info-view.js';
 import { remove, replace, RenderPosition, render } from '../framework/render.js';
 
 import { sortPoints, getDestinationsById } from '../utils/common.js';
-import { DEFAULT_SORT, DATE_FORMAT } from '../consts.js';
+import { DEFAULT_SORT, DATE_FORMAT, MAX_DESTINATIONS_TO_RENDER } from '../consts.js';
 
 import dayjs from 'dayjs';
 
@@ -16,7 +16,6 @@ export default class TripInfoPresenter {
   #points = null;
   #offers = [];
   #destinations = [];
-
 
   constructor({ headerContainer, pointModel }) {
     this.#headerContainer = headerContainer;
@@ -32,6 +31,10 @@ export default class TripInfoPresenter {
 
 
     if (this.#points.length === 0) {
+      if (this.#tripInfoComponent !== null) {
+        remove(this.#tripInfoComponent);
+        this.#tripInfoComponent = null;
+      }
       return;
     }
 
@@ -50,7 +53,6 @@ export default class TripInfoPresenter {
 
   #createTripInfo() {
     this.#points = sortPoints(DEFAULT_SORT, this.#pointModel.points);
-
     if (this.#points.length > 0) {
       return {
         title: this.#getInfoDestinations(this.#points),
@@ -75,16 +77,16 @@ export default class TripInfoPresenter {
     if (condensed.length === 0) {
       return '';
     }
-    if (condensed.length <= 3) {
+    if (condensed.length <= MAX_DESTINATIONS_TO_RENDER) {
       return condensed.join(' — ');
     }
-    return `${condensed[0]} — ... — ${condensed[condensed.length - 1]}`;
+    return `${condensed[0]} ... ${condensed[condensed.length - 1]}`;
   }
 
   #getInfoDates(points) {
     const firstDate = dayjs(points[0].dateFrom);
     const lastDate = dayjs(points[points.length - 1].dateTo);
-    return `${firstDate.format(DATE_FORMAT.DAY)} - ${lastDate.format(DATE_FORMAT.DAY_MONTH)}`;
+    return `${firstDate.format(DATE_FORMAT.DAY_MONTH)} - ${lastDate.format(DATE_FORMAT.DAY_MONTH)}`;
   }
 
   #calculateCost(points) {
