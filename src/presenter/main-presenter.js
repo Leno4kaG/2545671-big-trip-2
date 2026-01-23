@@ -13,8 +13,6 @@ import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { FilterType, EmptyFilterMessages, DEFAULT_SORT, UserAction, UpdateType, InfoMessage, TimeLimit } from '../consts.js';
 import { filterPoints, sortPoints } from '../utils/common.js';
 
-
-
 export default class MainPresenter {
   #mainContainer = null;
   #headerContainer = null;
