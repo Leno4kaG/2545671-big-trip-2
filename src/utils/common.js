@@ -12,7 +12,6 @@ function getOffersByType(allOffers, type) {
 }
 
 function getDestinationsById(elements, id) {
-
   return elements.find((element) => element.id === id);
 }
 

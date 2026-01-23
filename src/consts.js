@@ -5,6 +5,7 @@ export const MILLISECONDS_IN_HOUR = MILLISECONDS_IN_MINUTE * 60;
 export const MILLISECONDS_IN_DAY = MILLISECONDS_IN_HOUR * 24;
 
 export const DATE_FORMAT = {
+  DAY: 'D',
   DAY_MONTH: 'D MMM',
   MONTH_DAY: 'MMM DD',
   HOUR_MINUTES: 'HH:mm',
@@ -17,10 +18,10 @@ export const POINTS_TYPES = [
 ];
 
 export const FilterType = {
-  EVERYTHING: 'Everything',
-  FUTURE: 'Future',
-  PRESENT: 'Present',
-  PAST: 'Past'
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
 };
 
 export const EmptyFilterMessages = {
@@ -91,3 +92,5 @@ export const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000
 };
+
+export const MAX_DESTINATIONS_TO_RENDER = 3;

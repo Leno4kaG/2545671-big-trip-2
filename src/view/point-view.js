@@ -4,23 +4,24 @@ import { humanizeDueDate, getDifferenceInTime } from '../utils/date.js';
 import { getOffersByType, getDestinationsById } from '../utils/common.js';
 import { DATE_FORMAT } from '../consts.js';
 
-function createOffersTemplate(offers) {
-
-  return Object.keys(offers).length > 0 ?
+function createOfferTemplate(offer) {
+  return (
     `<li class="event__offer">
-        <span class="event__offer-title">${offers.title}</span>
+        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offers.price}</span>
+        <span class="event__offer-price">${offer.price}</span>
     </li>`
-    : '';
+  );
 }
 
 function createPointTemplate(point, offers, destinations) {
   const { basePrice, dateFrom, dateTo, isFavorite, destination, type } = point;
 
-  const foundDestinationById = getDestinationsById(destinations, destination);
+  const foundDestinationById = getDestinationsById(destinations, destination) || {};
   const { name } = foundDestinationById;
-  const foundOffersByType = getOffersByType(offers, type);
+  const foundOffersByType = getOffersByType(offers, type) || { offers: [] };
+
+  const offersToRender = foundOffersByType.offers.filter((offer) => point.offers.includes(offer.id));
 
   return `<li class="trip-events__item">
               <div class="event">
@@ -33,7 +34,7 @@ function createPointTemplate(point, offers, destinations) {
                   <p class="event__time">
                     <time class="event__start-time" datetime="${dateFrom}">${humanizeDueDate(dateFrom, DATE_FORMAT.HOUR_MINUTES)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="2019-03-18T11:00">${humanizeDueDate(dateTo, DATE_FORMAT.HOUR_MINUTES)}</time>
+                    <time class="event__end-time" datetime="${dateTo}">${humanizeDueDate(dateTo, DATE_FORMAT.HOUR_MINUTES)}</time>
                   </p>
                   <p class="event__duration">${getDifferenceInTime(dateFrom, dateTo)}</p>
                 </div>
@@ -42,9 +43,9 @@ function createPointTemplate(point, offers, destinations) {
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                 ${foundOffersByType.offers.map((offer) => createOffersTemplate(offer)).join('')}
+               ${offersToRender.map((offer) => createOfferTemplate(offer)).join('')}
                 </ul>
-                <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}"  type="button">
+                <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
                     <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>

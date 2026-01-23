@@ -22,7 +22,7 @@ export default class FilterPresenter {
   get filters() {
     return Object.values(FilterType).map((type) => ({
       type,
-      count: (this.#pointModel.points.length > 0) ? filterPoints(type, this.#pointModel.points) : 0,
+      count: (this.#pointModel.points.length > 0) ? filterPoints(type, this.#pointModel.points).length : 0,
       isChecked: type === this.#filterModel.filter,
     }));
   }
